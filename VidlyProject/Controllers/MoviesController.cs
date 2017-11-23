@@ -96,7 +96,7 @@ namespace VidlyProject.Controllers
         {
             var genres = _context.Genres.ToList();
 
-            var viewModel = new MovieFormViewModel()
+            var viewModel = new MovieFormViewModel
             {
                 Genres = genres
             };
