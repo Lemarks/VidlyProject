@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web.Http;
 using VidlyProject.Dtos;
@@ -20,7 +21,10 @@ namespace VidlyProject.Controllers.Api
         //GET /Api/Movies
         public IEnumerable<MovieDto> GetMovies()
         {
-            return _context.Movies.ToList().Select(Mapper.Map<Movie, MovieDto>);
+            return _context.Movies
+                .Include(m => m.Genre)
+                .ToList()
+                .Select(Mapper.Map<Movie, MovieDto>);
         }
 
         //GET /Api/Movies/1
@@ -49,7 +53,7 @@ namespace VidlyProject.Controllers.Api
             return Created(new Uri(Request.RequestUri + "/" + movie.Id), movieDto);
         }
 
-        [HttpPost]
+        [HttpPut]
         public IHttpActionResult UpdateMovie(int id, MovieDto movieDto)
         {
             if (!ModelState.IsValid)
